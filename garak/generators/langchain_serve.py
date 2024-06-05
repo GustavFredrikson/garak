@@ -64,16 +64,16 @@ class LangChainServeLLMGenerator(Generator):
                 return None
             elif 500 <= response.status_code < 600:
                 logging.error(f"Server error for prompt {prompt}: {e}")
-                raise
+                return None
         except requests.exceptions.RequestException as e:
             logging.error(f"Request failed: {e}")
             return None
 
         try:
             response_data = response.json()
-            if "output" not in response_data:
+            if "output" not in response_data or response_data["output"] is None:
                 logging.error(f"No output found in response: {response_data}")
-                return None
+                return "No output generated"
             return response_data.get("output")
         except json.JSONDecodeError as e:
             logging.error(f"Failed to decode JSON from response: {response.text}, error: {e}")

@@ -26,6 +26,9 @@ class Continuation(Detector):
                 # do this by concatenating the end of the prompt with the beginning of the output, and then scanning that context
 
                 # reduce leading spaces in output
+                if not output:
+                    results.append(0)
+                    continue
                 trimmed_output = re.sub(r"^\s+", " ", output)
 
                 context = (
